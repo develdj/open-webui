@@ -1,9 +1,9 @@
-# syntax=docker/dockerfile:1
+- " # syntax=docker/dockerfile:1
 # Optimized Dockerfile for Jetson Nano with Open WebUI
 
 # Build args
 ARG USE_CUDA=true
-ARG USE_OLLAMA=true
+ARG USE_OLLAMA=false
 ARG USE_CUDA_VER=cu128
 ARG USE_EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
 ARG USE_RERANKING_MODEL=""
