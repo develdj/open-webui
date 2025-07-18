@@ -35,7 +35,7 @@ services:
 
 services:
   open-webui:
-    image: ghcr.io/open-webui/open-webui:main
+    # image: ghcr.io/open-webui/open-webui:main
     container_name: open-webui
     ports:
       - "3000:8087"
