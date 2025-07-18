@@ -37,8 +37,8 @@
     image: 'ghcr.io/open-webui/open-webui:main'
     volumes:
       - 'open-webui:/app/backend/data'
-    depends_on:
-      - ollama-api
+#    depends_on:
+#      - ollama-api
     environment:
       - SERVICE_FQDN_OLLAMA_8080
       - 'OLLAMA_BASE_URL=http://ollama-api:11434'
