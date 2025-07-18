@@ -59,7 +59,7 @@ ENV ENV=prod \
     USE_RERANKING_MODEL_DOCKER=${USE_RERANKING_MODEL}
 
 ## Basis URL Config ##
-ENV OLLAMA_BASE_URL="/ollama" \
+ENV OLLAMA_BASE_URL="http://192.168.1.81:11434" \
     OPENAI_API_BASE_URL=""
 
 ## API Key and Security Config ##
