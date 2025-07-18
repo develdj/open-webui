@@ -41,7 +41,7 @@ services:
 #      - ollama-api
     environment:
       - SERVICE_FQDN_OLLAMA_8080
-      - 'OLLAMA_BASE_URL=http://ollama-api:11434'
+      - 'OLLAMA_BASE_URL=http://127.0.0.1:11434'
     healthcheck:
       test:
         - CMD
