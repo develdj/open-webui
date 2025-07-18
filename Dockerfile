@@ -38,7 +38,7 @@ ENV APP_BUILD_HASH=${BUILD_HASH}
 RUN npm run build
 
 ######## WebUI backend ########
-FROM FROM dustynv/cuda-python:r36.4.0-cu128-24.04 AS base
+FROM dustynv/cuda-python:r36.4.0-cu128-24.04 AS base
 
 # Use args
 ARG USE_CUDA
