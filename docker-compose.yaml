@@ -35,7 +35,7 @@ services:
 
 services:
   open-webui:
-    image: dustynv/cuda-python:r36.4.0-cu128-24.04 # ghcr.io/open-webui/open-webui:main
+    image: ghcr.io/open-webui/open-webui:main
     container_name: open-webui
     ports:
       - "3000:8087"
