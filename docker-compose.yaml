@@ -1,4 +1,4 @@
-services:
+#services:
 #  ollama:
 #    volumes:
 #      - ollama:/root/.ollama
@@ -8,27 +8,46 @@ services:
 #    restart: unless-stopped
 #    image: ollama/ollama:${OLLAMA_DOCKER_TAG-latest}
 
-  open-webui:
-    build:
-      context: .
-      args:
-        OLLAMA_BASE_URL: 'http://127.0.0.1:11434'
-      dockerfile: Dockerfile
-    image: ghcr.io/open-webui/open-webui:${WEBUI_DOCKER_TAG-main}
-    container_name: open-webui
-    volumes:
-      - open-webui:/app/backend/data
+#  open-webui:
+#    build:
+#      context: .
+#      args:
+#        OLLAMA_BASE_URL: 'http://127.0.0.1:11434'
+#      dockerfile: Dockerfile
+#    image: ghcr.io/open-webui/open-webui:${WEBUI_DOCKER_TAG-main}
+#    container_name: open-webui
+#    volumes:
+#      - open-webui:/app/backend/data
 #    depends_on:
 #      - ollama
-    ports:
-      - ${OPEN_WEBUI_PORT-3000}:8080
-    environment:
-      - 'OLLAMA_BASE_URL=http://127.0.0.1:11434'
-      - 'WEBUI_SECRET_KEY='
-    extra_hosts:
-      - host.docker.internal:host-gateway
-    restart: unless-stopped
+#    ports:
+#      - ${OPEN_WEBUI_PORT-3000}:8080
+#    environment:
+#      - 'OLLAMA_BASE_URL=http://127.0.0.1:11434'
+#      - 'WEBUI_SECRET_KEY='
+#    extra_hosts:
+#      - host.docker.internal:host-gateway
+#    restart: unless-stopped
 
-volumes:
+#volumes:
 #  ollama: {}
-  open-webui: {}
+#  open-webui: {}
+
+  open-webui:
+    image: 'ghcr.io/open-webui/open-webui:main'
+    volumes:
+      - 'open-webui:/app/backend/data'
+    depends_on:
+      - ollama-api
+    environment:
+      - SERVICE_FQDN_OLLAMA_8080
+      - 'OLLAMA_BASE_URL=http://ollama-api:11434'
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - '-f'
+        - 'http://127.0.0.1:8080'
+      interval: 5s
+      timeout: 30s
+      retries: 10
