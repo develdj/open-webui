@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 # Initialize device type args
 # use build args in the docker build command with --build-arg="BUILDARG=true"
-ARG USE_CUDA=false
+ARG USE_CUDA=true
 ARG USE_OLLAMA=false
 # Tested with cu117 for CUDA 11 and cu121 for CUDA 12 (default)
 ARG USE_CUDA_VER=cu128
@@ -21,7 +21,8 @@ ARG UID=0
 ARG GID=0
 
 ######## WebUI frontend ########
-FROM --platform=$BUILDPLATFORM node:22-alpine3.20 AS build
+#FROM --platform=$BUILDPLATFORM node:22-alpine3.20 AS build
+FROM dustynv/cuda-python:r36.4.0-cu128-24.04 As build
 ARG BUILD_HASH
 
 WORKDIR /app
@@ -37,7 +38,7 @@ ENV APP_BUILD_HASH=${BUILD_HASH}
 RUN npm run build
 
 ######## WebUI backend ########
-FROM python:3.11-slim-bookworm AS base
+FROM FROM dustynv/cuda-python:r36.4.0-cu128-24.04 AS base
 
 # Use args
 ARG USE_CUDA
@@ -64,7 +65,7 @@ ENV OLLAMA_BASE_URL="http://192.168.1.81:11434" \
 
 ## API Key and Security Config ##
 ENV OPENAI_API_KEY="" \
-    WEBUI_SECRET_KEY="" \
+    WEBUI_SECRET_KEY="supersecret" \
     SCARF_NO_ANALYTICS=true \
     DO_NOT_TRACK=true \
     ANONYMIZED_TELEMETRY=false
