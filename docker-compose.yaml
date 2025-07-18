@@ -48,6 +48,9 @@ services:
       - "host.docker.internal:host-gateway"
     restart: unless-stopped
 
+volumes:
+  open-webui: {}
+  
 #volumes:
 #  open-webui: {}
 
