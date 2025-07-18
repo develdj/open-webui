@@ -34,37 +34,25 @@
 services:
   open-webui:
     build:
-      context: https://github.com/develdj/open-webui.git
+      context: .
       dockerfile: Dockerfile
       args:
-        USE_CUDA: "false"
+        USE_CUDA: "true"
         USE_OLLAMA: "false"
-        BUILD_HASH: "main"
-    image: 'develdj/open-webui:jetson-nano'
+        USE_CUDA_VER: "cu128"
+    image: 'open-webui:jetson'
     volumes:
       - 'open-webui:/app/backend/data'
     environment:
-      - SERVICE_FQDN_OPENWEBUI_8080
-      - 'OLLAMA_BASE_URL=http://192.168.1.81:11434'
-      - 'WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}'
-      - 'WHISPER_MODEL=tiny'
-      - 'TORCH_NUM_THREADS=4'
-      - 'OMP_NUM_THREADS=4'
+      SERVICE_FQDN_OPENWEBUI_8080: "${SERVICE_FQDN_OPENWEBUI_8080:-}"
+      OLLAMA_BASE_URL: "http://192.168.1.81:11434"
+      WEBUI_SECRET_KEY: "${WEBUI_SECRET_KEY:-changeme}"
     healthcheck:
-      test:
-        - CMD
-        - curl
-        - '-f'
-        - 'http://127.0.0.1:8080/health'
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8080/health"]
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 60s
-    deploy:
-      resources:
-        limits:
-          memory: 3G
-          
+      
 volumes:
   open-webui:
     driver: local
