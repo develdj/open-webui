@@ -43,6 +43,7 @@ services:
       - open-webui:/app/backend/data
     environment:
       - WEBUI_SECRET_KEY=supersecret
+      - 'OLLAMA_BASE_URL=http://127.0.0.1:11434'
     extra_hosts:
       - "host.docker.internal:host-gateway"
     restart: unless-stopped
