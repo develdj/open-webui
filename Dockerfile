@@ -104,7 +104,7 @@ RUN pip3 install --no-cache-dir uv && \
     if [ "$USE_CUDA" = "true" ]; then \
         pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/$USE_CUDA_DOCKER_VER --no-cache-dir; \
     else \
-        pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu --no-cache-dir; \
+        pip3 install torch torchvision torchaudio --extra-index-url https://pypi.jetson-ai-lab.io/jp6/cu126 --no-cache-dir; \
     fi && \
     uv pip install --system -r requirements.txt --no-cache-dir
 
