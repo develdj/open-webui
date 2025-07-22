@@ -2,7 +2,7 @@
 # Jetson Orin 64 GB – fastest possible Open-WebUI image
 # ------------------------------------------------------------------------------
 # 1. Base with CUDA 12.x & PyTorch 2.2 already compiled for JetPack 6
-FROM nvcr.io/nvidia/l4t-pytorch:r36.2.0-pth2.2-py3 AS base
+FROM dustynv/vllm:0.8.6-r36.4-cu128-24.04 AS base
 
 # 2. Re-use wheels layer so we never reinstall unless requirements.txt changes
 FROM base AS prebuilt
