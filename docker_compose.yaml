@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  open-webui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BUILD_HASH: "${BUILD_HASH:-dev}"
+    image: open-webui:jetson-fast
+    container_name: open-webui
+    restart: unless-stopped
+    runtime: nvidia                 # GPU support on JetPack 6
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - CUDA_VISIBLE_DEVICES=0
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://192.168.1.81:11434}
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:-changeme}
+    ports:
+      - "3000:8080"                 # change left side if 3000 is busy
+    volumes:
+      - open-webui:/app/backend/data
+
+volumes:
+  open-webui:
+    driver: local
