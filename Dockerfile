@@ -1,4 +1,4 @@
-- " # syntax=docker/dockerfile:1
+# syntax=docker/dockerfile:1
 # Optimized Dockerfile for Jetson Nano with Open WebUI
 
 # Build args
