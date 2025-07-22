@@ -6,7 +6,7 @@ services:
       args:
         USE_CUDA: "true"
         USE_OLLAMA: "true"
-        USE_CUDA_VER: "cu128"
+        USE_CUDA_VER: "cu126"
     image: 'open-webui:jetson'
     volumes:
       - 'open-webui:/app/backend/data'
