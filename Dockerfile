@@ -102,7 +102,7 @@ COPY --chown=$UID:$GID ./backend/requirements.txt ./requirements.txt
 # Install PyTorch and dependencies
 RUN pip3 install --no-cache-dir uv && \
     if [ "$USE_CUDA" = "true" ]; then \
-        pip3 install https://pypi.jetson-ai-lab.io/root/pypi/+f/a10/3b5d782af5bd1/torch-2.7.1-cp310-cp310-manylinux_2_28_aarch64.whl#sha256=a103b5d782af5bd119b81dbcc7ffc6fa09904c423ff8db397a1e6ea8fd71508f \
+        https://pypi.jetson-ai-lab.io/root/pypi/+f/236/f501f2e383f1c/torch-2.7.1-cp311-cp311-manylinux_2_28_aarch64.whl#sha256=236f501f2e383f1cb861337bdf057712182f910f10aeaf509065d54d339e49b2 \
         pip3 install https://pypi.jetson-ai-lab.io/root/pypi/+f/d66/bd76b226fdd41/torchaudio-2.7.1-cp312-cp312-manylinux_2_28_aarch64.whl#sha256=d66bd76b226fdd4135c97650e1b7eb63fb7659b4ed0e3a778898e41dbba21b61 \
         pip3 install https://pypi.jetson-ai-lab.io/root/pypi/+f/964/414eef19459d5/torchvision-0.22.1-cp312-cp312-manylinux_2_28_aarch64.whl#sha256=964414eef19459d55a10e886e2fca50677550e243586d1678f65e3f6f6bac47a \
         #pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/$USE_CUDA_DOCKER_VER --no-cache-dir; \
