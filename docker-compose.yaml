@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
       args:
         USE_CUDA: "true"
-        USE_OLLAMA: "true"
+        USE_OLLAMA: "false"
         USE_CUDA_VER: "cu128"
     image: 'open-webui:jetson'
     volumes:
