@@ -3,8 +3,8 @@
 
 # Build args
 ARG USE_CUDA=true
-ARG USE_OLLAMA=false
-ARG USE_CUDA_VER=cu128
+ARG USE_OLLAMA=true
+ARG USE_CUDA_VER=cu130
 ARG USE_EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
 ARG USE_RERANKING_MODEL=""
 ARG USE_TIKTOKEN_ENCODING_NAME="cl100k_base"
@@ -102,10 +102,13 @@ COPY --chown=$UID:$GID ./backend/requirements.txt ./requirements.txt
 # Install PyTorch and dependencies
 RUN pip3 install --no-cache-dir uv && \
     if [ "$USE_CUDA" = "true" ]; then \
-        pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/$USE_CUDA_DOCKER_VER --no-cache-dir; \
-    else \
-        pip3 install torch torchvision torchaudio --extra-index-url https://pypi.jetson-ai-lab.io/jp6/cu126 --no-cache-dir; \
-    fi && \
+        pip3 install https://pypi.jetson-ai-lab.io/root/pypi/+f/27e/a1e518df4c9de/torch-2.7.1-cp312-cp312-manylinux_2_28_aarch64.whl#sha256=27ea1e518df4c9de73af7e8a720770f3628e7f667280bce2be7a16292697e3fa \
+        pip3 install https://pypi.jetson-ai-lab.io/root/pypi/+f/d66/bd76b226fdd41/torchaudio-2.7.1-cp312-cp312-manylinux_2_28_aarch64.whl#sha256=d66bd76b226fdd4135c97650e1b7eb63fb7659b4ed0e3a778898e41dbba21b61 \
+        pip3 install https://pypi.jetson-ai-lab.io/root/pypi/+f/964/414eef19459d5/torchvision-0.22.1-cp312-cp312-manylinux_2_28_aarch64.whl#sha256=964414eef19459d55a10e886e2fca50677550e243586d1678f65e3f6f6bac47a \
+        #pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/$USE_CUDA_DOCKER_VER --no-cache-dir; \
+    #else \
+        #pip3 install torch torchvision torchaudio --extra-index-url https://pypi.jetson-ai-lab.io/jp6/cu126 --no-cache-dir; \
+    #fi && \
     uv pip install --system -r requirements.txt --no-cache-dir
 
 # Pre-download models (optional - can be commented out to reduce image size)
