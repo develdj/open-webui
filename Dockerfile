@@ -100,16 +100,21 @@ RUN apt-get update && \
 COPY --chown=$UID:$GID ./backend/requirements.txt ./requirements.txt
 RUN python3 -m pip install --upgrade pip
 # Install PyTorch and dependencies
+# Install PyTorch stack (optimized for Jetson Orin / CUDA 12.8 / Python 3.11)
 RUN pip3 install --no-cache-dir uv && \
     if [ "$USE_CUDA" = "true" ]; then \
-        pip3 install https://pypi.jetson-ai-lab.io/root/pypi/+f/236/f501f2e383f1c/torch-2.7.1-cp311-cp311-manylinux_2_28_aarch64.whl#sha256=236f501f2e383f1cb861337bdf057712182f910f10aeaf509065d54d339e49b2 \
-        pip3 install https://pypi.jetson-ai-lab.io/root/pypi/+f/53b/c4ba12e7468be/torchaudio-2.7.1-cp311-cp311-manylinux_2_28_aarch64.whl#sha256=53bc4ba12e7468be34a7ca2ee837ee5c8bd5755b25c12f665af9339cae37e265 \
-        pip3 install https://pypi.jetson-ai-lab.io/root/pypi/+f/8b4/a53a6067d63ad/torchvision-0.22.1-cp311-cp311-manylinux_2_28_aarch64.whl#sha256=8b4a53a6067d63adba0c52f2b8dd2290db649d642021674ee43c0c922f0c6a69 \
-        #pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/$USE_CUDA_DOCKER_VER --no-cache-dir; \
+        pip3 install torch==2.7.1 \
+                     torchaudio==2.7.1 \
+                     torchvision==0.22.1 \
+            --extra-index-url https://pypi.jetson-ai-lab.dev/jp6/cu128; \
     else \
-        pip3 install torch torchvision torchaudio --extra-index-url https://pypi.jetson-ai-lab.io/jp6/cu126 --no-cache-dir; \
+        pip3 install torch==2.7.1 \
+                     torchaudio==2.7.1 \
+                     torchvision==0.22.1 \
+            --extra-index-url https://pypi.org/simple; \
     fi && \
     uv pip install --system -r requirements.txt --no-cache-dir
+
 
 # Pre-download models (optional - can be commented out to reduce image size)
 RUN python -c "import os; from sentence_transformers import SentenceTransformer; SentenceTransformer(os.environ['RAG_EMBEDDING_MODEL'], device='cpu')" && \
