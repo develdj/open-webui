@@ -98,7 +98,7 @@ RUN apt-get update && \
 
 # Copy and install Python dependencies
 COPY --chown=$UID:$GID ./backend/requirements.txt ./requirements.txt
-
+RUN python3 -m pip install --upgrade pip
 # Install PyTorch and dependencies
 RUN pip3 install --no-cache-dir uv && \
     if [ "$USE_CUDA" = "true" ]; then \
