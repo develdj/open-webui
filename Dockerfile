@@ -107,7 +107,7 @@ RUN pip3 install --no-cache-dir uv && \
         pip3 install https://pypi.jetson-ai-lab.io/root/pypi/+f/964/414eef19459d5/torchvision-0.22.1-cp312-cp312-manylinux_2_28_aarch64.whl#sha256=964414eef19459d55a10e886e2fca50677550e243586d1678f65e3f6f6bac47a \
         #pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/$USE_CUDA_DOCKER_VER --no-cache-dir; \
     else \
-        pip3 install torch torchvision torchaudio --extra-index-url https://pypi.jetson-ai-lab.io/jp6/cu130 --no-cache-dir; \
+        pip3 install torch torchvision torchaudio --extra-index-url https://pypi.jetson-ai-lab.io/jp6/cu126 --no-cache-dir; \
     fi && \
     uv pip install --system -r requirements.txt --no-cache-dir
 
