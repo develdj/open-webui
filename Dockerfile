@@ -27,7 +27,7 @@ ARG GID=1000
 ARG BUILD_HASH=dev
 
 # Copy pre-compiled wheels & frontend artefacts
-COPY --from=prebuilt /usr/local/lib/python3.10/dist-packages /usr/local/lib/python3.10/dist-packages
+COPY --from=prebuilt /usr/local/lib/python3.12/dist-packages /usr/local/lib/python3.12/dist-packages
 COPY --from=frontend /app/build /app/build
 COPY --from=frontend /app/CHANGELOG.md /app/
 COPY --chown=$UID:$GID backend /app/backend
