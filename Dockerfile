@@ -161,7 +161,7 @@ COPY --chown=$UID:$GID pydantic-2.11.5-py3-none-any.whl /tmp/
 COPY --chown=$UID:$GID pillow-11.2.1-cp310-cp310-manylinux_2_28_aarch64.whl /tmp/
 COPY --chown=$UID:$GID opencv_python-4.11.0.86-cp37-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl /tmp/
 COPY --chown=$UID:$GID aiohttp-3.12.12-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl /tmp/
-COPY --chown=$UID:$GID httpx-0.28.1-py3-none-any.whl /tmp/
+# COPY --chown=$UID:$GID httpx-0.28.1-py3-none-any.whl /tmp/
 # COPY --chown=$UID:$GID requests-2.32.4-py3-none-any.whl /tmp/
 
 RUN python3 -m pip install --upgrade pip
