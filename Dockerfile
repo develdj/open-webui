@@ -135,30 +135,21 @@ RUN if [ "$USE_OLLAMA" = "true" ]; then \
 # install python dependencies
 COPY --chown=$UID:$GID ./backend/requirements.txt ./requirements.txt
 
-# Skip ALL local wheels - let pip install from PyPI/indexes with optimizations
-# This avoids Git repository size issues and platform compatibility problems
-
 RUN python3 -m pip install --upgrade pip
 
 # Install PyTorch and dependencies
 # Install PyTorch stack (optimized for Jetson Orin / CUDA 12.6 / Python 3.10)
 RUN pip3 install --no-cache-dir uv
 
-# Install PyTorch with Jetson AI Lab index for better compatibility
+# Install PyTorch with retry mechanism for network issues
 RUN if [ "$USE_CUDA" = "true" ]; then \
-        # Use Jetson AI Lab index for optimized packages
-        pip3 install --retries 5 --timeout 300 \
-            torch==2.7.1 \
-            torchaudio==2.7.1 \
-            torchvision==0.22.1 \
-            --extra-index-url https://pypi.jetson-ai-lab.com/jp6/cu126 \
-            --trusted-host pypi.jetson-ai-lab.com || \
-        # Fallback to regular PyPI if Jetson index fails
-        pip3 install --retries 5 --timeout 300 \
-            torch==2.7.1 \
-            torchaudio==2.7.1 \
-            torchvision==0.22.1 \
-            --extra-index-url https://pypi.org/simple; \
+        # Install PyTorch with retries and timeout settings
+        pip3 install --retries 5 --timeout 300 --force-reinstall --no-deps \
+            https://pypi.jetson-ai-lab.io/jp6/cu126/+f/62a/1beee9f2f1470/torch-2.8.0-cp310-cp310-linux_aarch64.whl#sha256=62a1beee9f2f147076a974d2942c90060c12771c94740830327cae705b2595fc && \
+        pip3 install --retries 5 --timeout 300 --force-reinstall --no-deps \
+            https://pypi.jetson-ai-lab.io/jp6/cu126/+f/81a/775c8af36ac85/torchaudio-2.8.0-cp310-cp310-linux_aarch64.whl#sha256=81a775c8af36ac859fb3f4a1b2f662d5fcf284a835b6bb4ed8d0827a6aa9c0b7 && \
+        pip3 install --retries 5 --timeout 300 --force-reinstall --no-deps \
+            https://pypi.jetson-ai-lab.io/jp6/cu126/+f/907/c4c1933789645/torchvision-0.23.0-cp310-cp310-linux_aarch64.whl#sha256=907c4c1933789645ebb20dd9181d40f8647978e6bd30086ae7b01febb937d2d1; \
     else \
         pip3 install --retries 5 --timeout 300 \
             torch==2.8.0 \
