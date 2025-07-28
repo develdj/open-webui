@@ -162,13 +162,13 @@ COPY --chown=$UID:$GID pillow-11.2.1-cp310-cp310-manylinux_2_28_aarch64.whl /tmp
 COPY --chown=$UID:$GID opencv_python-4.11.0.86-cp37-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl /tmp/
 COPY --chown=$UID:$GID aiohttp-3.12.12-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl /tmp/
 COPY --chown=$UID:$GID httpx-0.28.1-py3-none-any.whl /tmp/
-COPY --chown=$UID:$GID requests-2.32.4-py3-none-any.whl /tmp/
+# COPY --chown=$UID:$GID requests-2.32.4-py3-none-any.whl /tmp/
 
 RUN python3 -m pip install --upgrade pip
 
 # Install PyTorch and dependencies
 # Install PyTorch stack (optimized for Jetson Orin / CUDA 12.6 / Python 3.10)
-RUN pip3 install --no-cache-dir uv
+RUN pip3 install --no-cache-dir uv requests
 
 # Install PyTorch and optimized packages from local wheels
 RUN if [ "$USE_CUDA" = "true" ]; then \
@@ -196,8 +196,9 @@ RUN if [ "$USE_CUDA" = "true" ]; then \
         pip3 install --force-reinstall --no-deps /tmp/opencv_python-4.11.0.86-cp37-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl && \
         pip3 install --force-reinstall --no-deps /tmp/aiohttp-3.12.12-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl && \
         pip3 install --force-reinstall --no-deps /tmp/httpx-0.28.1-py3-none-any.whl && \
-        pip3 install --force-reinstall --no-deps /tmp/requests-2.32.4-py3-none-any.whl && \
+        #pip3 install --force-reinstall --no-deps /tmp/requests-2.32.4-py3-none-any.whl && \
         rm -f /tmp/*.whl; \
+        
     else \
         pip3 install --retries 5 --timeout 300 \
             torch==2.8.0 \
