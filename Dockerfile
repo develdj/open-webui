@@ -1,10 +1,10 @@
 # syntax=docker/dockerfile:1
 # Initialize device type args
 # use build args in the docker build command with --build-arg="BUILDARG=true"
-ARG USE_CUDA=false
-ARG USE_OLLAMA=false
+ARG USE_CUDA=true
+ARG USE_OLLAMA=true
 # Tested with cu117 for CUDA 11 and cu121 for CUDA 12 (default)
-ARG USE_CUDA_VER=cu128
+ARG USE_CUDA_VER=cu126
 # any sentence transformer model; models to use can be found at https://huggingface.co/models?library=sentence-transformers
 # Leaderboard: https://huggingface.co/spaces/mteb/leaderboard 
 # for better performance and multilangauge support use "intfloat/multilingual-e5-large" (~2.5GB) or "intfloat/multilingual-e5-base" (~1.5GB)
@@ -140,14 +140,15 @@ RUN python3 -m pip install --upgrade pip
 # Install PyTorch stack (optimized for Jetson Orin / CUDA 12.8 / Python 3.11)
 RUN pip3 install --no-cache-dir uv && \
     if [ "$USE_CUDA" = "true" ]; then \
-        pip3 install torch==2.7.1 \
-                     torchaudio==2.7.1 \
-                     torchvision==0.22.1 \
-            --extra-index-url https://pypi.jetson-ai-lab.dev/jp6/cu128; \
+        pip3 install torch==2.8.0 \
+                     torchaudio==2.8.0 \
+                     torchvision==0.23.0 \
+            --extra-index-url https://pypi.jetson-ai-lab.dev/jp6/cu126; \
+        
     else \
-        pip3 install torch==2.7.1 \
-                     torchaudio==2.7.1 \
-                     torchvision==0.22.1 \
+        pip3 install torch==2.8.0 \
+                     torchaudio==2.8.0 \
+                     torchvision==0.23.0 \
             --extra-index-url https://pypi.org/simple; \
     fi && \
     uv pip install --system -r requirements.txt --no-cache-dir
