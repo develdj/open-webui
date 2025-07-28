@@ -136,9 +136,9 @@ RUN if [ "$USE_OLLAMA" = "true" ]; then \
 COPY --chown=$UID:$GID ./backend/requirements.txt ./requirements.txt
 
 # Copy PyTorch wheels from ComfyUI (proven compatibility)
-COPY --chown=$UID:$GID wheels/torch-2.7.0-*.whl /tmp/
-COPY --chown=$UID:$GID wheels/torchaudio-2.7.0-*.whl /tmp/
-COPY --chown=$UID:$GID wheels/torchvision-0.22.0-*.whl /tmp/
+COPY --chown=$UID:$GID wheels/torch-2.7.1-*.whl /tmp/
+COPY --chown=$UID:$GID wheels/torchaudio-2.7.1-*.whl /tmp/
+COPY --chown=$UID:$GID wheels/torchvision-0.22.1-*.whl /tmp/
 
 # Copy performance optimization packages
 COPY --chown=$UID:$GID wheels/bitsandbytes-0.45.5-*.whl /tmp/
