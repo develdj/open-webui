@@ -37,7 +37,7 @@ ENV APP_BUILD_HASH=${BUILD_HASH}
 RUN npm run build
 
 ######## WebUI backend ########
-FROM python:3.11-slim-bookworm AS base
+FROM python:3.10-slim-bookworm AS base
 
 # Use args
 ARG USE_CUDA
@@ -138,12 +138,12 @@ COPY --chown=$UID:$GID ./backend/requirements.txt ./requirements.txt
 RUN python3 -m pip install --upgrade pip
 
 # Install PyTorch and dependencies
-# Install PyTorch stack (optimized for Jetson Orin / CUDA 12.8 / Python 3.11)
+# Install PyTorch stack (optimized for Jetson Orin / CUDA 12.6 / Python 3.10)
 RUN pip3 install --no-cache-dir uv && \
     if [ "$USE_CUDA" = "true" ]; then \
-        pip3 install https://pypi.jetson-ai-lab.io/jp6/cu126/+f/62a/1beee9f2f1470/torch-2.8.0-cp310-cp310-linux_aarch64.whl#sha256=62a1beee9f2f147076a974d2942c90060c12771c94740830327cae705b2595fc && \
-        pip3 install https://pypi.jetson-ai-lab.io/jp6/cu126/+f/81a/775c8af36ac85/torchaudio-2.8.0-cp310-cp310-linux_aarch64.whl#sha256=81a775c8af36ac859fb3f4a1b2f662d5fcf284a835b6bb4ed8d0827a6aa9c0b7 && \
-        pip3 install https://pypi.jetson-ai-lab.io/jp6/cu126/+f/907/c4c1933789645/torchvision-0.23.0-cp310-cp310-linux_aarch64.whl#sha256=907c4c1933789645ebb20dd9181d40f8647978e6bd30086ae7b01febb937d2d1; \
+        pip3 install --force-reinstall --no-deps https://pypi.jetson-ai-lab.io/jp6/cu126/+f/62a/1beee9f2f1470/torch-2.8.0-cp310-cp310-linux_aarch64.whl#sha256=62a1beee9f2f147076a974d2942c90060c12771c94740830327cae705b2595fc && \
+        pip3 install --force-reinstall --no-deps https://pypi.jetson-ai-lab.io/jp6/cu126/+f/81a/775c8af36ac85/torchaudio-2.8.0-cp310-cp310-linux_aarch64.whl#sha256=81a775c8af36ac859fb3f4a1b2f662d5fcf284a835b6bb4ed8d0827a6aa9c0b7 && \
+        pip3 install --force-reinstall --no-deps https://pypi.jetson-ai-lab.io/jp6/cu126/+f/907/c4c1933789645/torchvision-0.23.0-cp310-cp310-linux_aarch64.whl#sha256=907c4c1933789645ebb20dd9181d40f8647978e6bd30086ae7b01febb937d2d1; \
     else \
         pip3 install torch==2.8.0 \
                      torchaudio==2.8.0 \
