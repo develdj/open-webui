@@ -136,9 +136,15 @@ RUN if [ "$USE_OLLAMA" = "true" ]; then \
 COPY --chown=$UID:$GID ./backend/requirements.txt ./requirements.txt
 
 # Copy PyTorch wheels for local installation (much faster and more reliable)
-COPY --chown=$UID:$GID torch-2.8.0-cp310-cp310-linux_aarch64.whl /tmp/
-COPY --chown=$UID:$GID torchaudio-2.8.0-cp310-cp310-linux_aarch64.whl /tmp/
-COPY --chown=$UID:$GID torchvision-0.23.0-cp310-cp310-linux_aarch64.whl /tmp/
+COPY --chown=$UID:$GID wheels/torch-2.8.0-cp310-cp310-linux_aarch64.whl /tmp/
+COPY --chown=$UID:$GID wheels/torchaudio-2.8.0-cp310-cp310-linux_aarch64.whl /tmp/
+COPY --chown=$UID:$GID wheels/torchvision-0.23.0-cp310-cp310-linux_aarch64.whl /tmp/
+
+# Copy additional optimized packages for Jetson (uncomment as you download them)
+# COPY --chown=$UID:$GID wheels/bitsandbytes-0.47.0.dev0-cp310-cp310-linux_aarch64.whl /tmp/
+# COPY --chown=$UID:$GID wheels/flash_attn-2.8.2-cp310-cp310-linux_aarch64.whl /tmp/
+# COPY --chown=$UID:$GID wheels/xformers-0.0.32+8ed0992.d20250724-cp39-abi3-linux_aarch64.whl /tmp/
+# COPY --chown=$UID:$GID wheels/triton-3.4.0-cp310-cp310-linux_aarch64.whl /tmp/
 
 RUN python3 -m pip install --upgrade pip
 
@@ -151,6 +157,11 @@ RUN if [ "$USE_CUDA" = "true" ]; then \
         pip3 install --force-reinstall --no-deps /tmp/torch-2.8.0-cp310-cp310-linux_aarch64.whl && \
         pip3 install --force-reinstall --no-deps /tmp/torchaudio-2.8.0-cp310-cp310-linux_aarch64.whl && \
         pip3 install --force-reinstall --no-deps /tmp/torchvision-0.23.0-cp310-cp310-linux_aarch64.whl && \
+        # Install additional optimized packages if available (uncomment as you add wheels)
+        # pip3 install --force-reinstall --no-deps /tmp/bitsandbytes-0.47.0.dev0-cp310-cp310-linux_aarch64.whl && \
+        # pip3 install --force-reinstall --no-deps /tmp/flash_attn-2.8.2-cp310-cp310-linux_aarch64.whl && \
+        # pip3 install --force-reinstall --no-deps /tmp/xformers-0.0.32+8ed0992.d20250724-cp39-abi3-linux_aarch64.whl && \
+        # pip3 install --force-reinstall --no-deps /tmp/triton-3.4.0-cp310-cp310-linux_aarch64.whl && \
         rm -f /tmp/*.whl; \
     else \
         pip3 install --retries 5 --timeout 300 \
