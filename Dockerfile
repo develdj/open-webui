@@ -143,7 +143,7 @@ RUN pip3 install --no-cache-dir uv && \
         pip3 install torch==2.8.0 \
                      torchaudio==2.8.0 \
                      torchvision==0.23.0 \
-            --extra-index-url https://pypi.jetson-ai-lab.dev/jp6/cu126; \
+            --extra-index-url https://pypi.jetson-ai-lab.io/jp6/cu126; \
         
     else \
         pip3 install torch==2.8.0 \
