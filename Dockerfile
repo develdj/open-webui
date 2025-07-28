@@ -135,29 +135,34 @@ RUN if [ "$USE_OLLAMA" = "true" ]; then \
 # install python dependencies
 COPY --chown=$UID:$GID ./backend/requirements.txt ./requirements.txt
 
-# Copy PyTorch wheels from ComfyUI (proven compatibility)
-COPY --chown=$UID:$GID wheels/torch-2.7.1-*.whl /tmp/
-COPY --chown=$UID:$GID wheels/torchaudio-2.7.1-*.whl /tmp/
-COPY --chown=$UID:$GID wheels/torchvision-0.22.1-*.whl /tmp/
+# Copy PyTorch wheels from ComfyUI (exact filenames)
+COPY --chown=$UID:$GID torch-2.7.1-cp310-cp310-manylinux_2_28_aarch64.whl /tmp/
+COPY --chown=$UID:$GID torchaudio-2.7.1-cp310-cp310-manylinux_2_28_aarch64.whl /tmp/
+COPY --chown=$UID:$GID torchvision-0.22.1-cp310-cp310-manylinux_2_28_aarch64.whl /tmp/
 
 # Copy performance optimization packages
-COPY --chown=$UID:$GID wheels/bitsandbytes-0.45.5-*.whl /tmp/
-COPY --chown=$UID:$GID wheels/xformers-0.0.30*.whl /tmp/
-COPY --chown=$UID:$GID wheels/triton-3.3.0-*.whl /tmp/
+COPY --chown=$UID:$GID bitsandbytes-0.46.1-py3-none-manylinux_2_24_aarch64.whl /tmp/
+COPY --chown=$UID:$GID xformers-0.0.31.post1-cp39-abi3-linux_aarch64.whl /tmp/
 
 # Copy essential AI/ML packages
-COPY --chown=$UID:$GID wheels/transformers-4.52.4-*.whl /tmp/
-COPY --chown=$UID:$GID wheels/tokenizers-0.21.1-*.whl /tmp/
-COPY --chown=$UID:$GID wheels/safetensors-0.5.3-*.whl /tmp/
-COPY --chown=$UID:$GID wheels/accelerate-1.1.1-*.whl /tmp/
-COPY --chown=$UID:$GID wheels/diffusers-*.whl /tmp/
-COPY --chown=$UID:$GID wheels/huggingface-hub-0.33.0-*.whl /tmp/
+COPY --chown=$UID:$GID transformers-4.52.4-py3-none-any.whl /tmp/
+COPY --chown=$UID:$GID tokenizers-0.21.1-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl /tmp/
+COPY --chown=$UID:$GID safetensors-0.5.3-cp38-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl /tmp/
+COPY --chown=$UID:$GID accelerate-1.1.1-py3-none-any.whl /tmp/
+COPY --chown=$UID:$GID diffusers-0.34.0-py3-none-any.whl /tmp/
+COPY --chown=$UID:$GID huggingface_hub-0.33.0-py3-none-any.whl /tmp/
 
 # Copy additional performance packages
-COPY --chown=$UID:$GID wheels/numpy-*.whl /tmp/
-COPY --chown=$UID:$GID wheels/tiktoken-0.9.0-*.whl /tmp/
-COPY --chown=$UID:$GID wheels/einops-0.8.1-*.whl /tmp/
-COPY --chown=$UID:$GID wheels/pydantic-2.11.5-*.whl /tmp/
+COPY --chown=$UID:$GID numpy-2.2.6-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl /tmp/
+COPY --chown=$UID:$GID scipy-1.15.3-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl /tmp/
+COPY --chown=$UID:$GID tiktoken-0.9.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl /tmp/
+COPY --chown=$UID:$GID einops-0.8.1-py3-none-any.whl /tmp/
+COPY --chown=$UID:$GID pydantic-2.11.5-py3-none-any.whl /tmp/
+COPY --chown=$UID:$GID pillow-11.2.1-cp310-cp310-manylinux_2_28_aarch64.whl /tmp/
+COPY --chown=$UID:$GID opencv_python-4.11.0.86-cp37-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl /tmp/
+COPY --chown=$UID:$GID aiohttp-3.12.12-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl /tmp/
+COPY --chown=$UID:$GID httpx-0.28.1-py3-none-any.whl /tmp/
+COPY --chown=$UID:$GID requests-2.32.4-py3-none-any.whl /tmp/
 
 RUN python3 -m pip install --upgrade pip
 
@@ -168,25 +173,30 @@ RUN pip3 install --no-cache-dir uv
 # Install PyTorch and optimized packages from local wheels
 RUN if [ "$USE_CUDA" = "true" ]; then \
         # Core PyTorch stack (ComfyUI versions - proven compatibility)
-        pip3 install --force-reinstall --no-deps /tmp/torch-2.7.0-*.whl && \
-        pip3 install --force-reinstall --no-deps /tmp/torchaudio-2.7.0-*.whl && \
-        pip3 install --force-reinstall --no-deps /tmp/torchvision-0.22.0-*.whl && \
+        pip3 install --force-reinstall --no-deps /tmp/torch-2.7.1-cp310-cp310-manylinux_2_28_aarch64.whl && \
+        pip3 install --force-reinstall --no-deps /tmp/torchaudio-2.7.1-cp310-cp310-manylinux_2_28_aarch64.whl && \
+        pip3 install --force-reinstall --no-deps /tmp/torchvision-0.22.1-cp310-cp310-manylinux_2_28_aarch64.whl && \
         # Performance optimization packages
-        pip3 install --force-reinstall --no-deps /tmp/bitsandbytes-0.45.5-*.whl && \
-        pip3 install --force-reinstall --no-deps /tmp/xformers-0.0.30*.whl && \
-        pip3 install --force-reinstall --no-deps /tmp/triton-3.3.0-*.whl && \
+        pip3 install --force-reinstall --no-deps /tmp/bitsandbytes-0.46.1-py3-none-manylinux_2_24_aarch64.whl && \
+        pip3 install --force-reinstall --no-deps /tmp/xformers-0.0.31.post1-cp39-abi3-linux_aarch64.whl && \
         # Essential AI/ML packages
-        pip3 install --force-reinstall --no-deps /tmp/transformers-4.52.4-*.whl && \
-        pip3 install --force-reinstall --no-deps /tmp/tokenizers-0.21.1-*.whl && \
-        pip3 install --force-reinstall --no-deps /tmp/safetensors-0.5.3-*.whl && \
-        pip3 install --force-reinstall --no-deps /tmp/accelerate-1.1.1-*.whl && \
-        pip3 install --force-reinstall --no-deps /tmp/diffusers-*.whl && \
-        pip3 install --force-reinstall --no-deps /tmp/huggingface-hub-0.33.0-*.whl && \
+        pip3 install --force-reinstall --no-deps /tmp/transformers-4.52.4-py3-none-any.whl && \
+        pip3 install --force-reinstall --no-deps /tmp/tokenizers-0.21.1-cp39-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl && \
+        pip3 install --force-reinstall --no-deps /tmp/safetensors-0.5.3-cp38-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl && \
+        pip3 install --force-reinstall --no-deps /tmp/accelerate-1.1.1-py3-none-any.whl && \
+        pip3 install --force-reinstall --no-deps /tmp/diffusers-0.34.0-py3-none-any.whl && \
+        pip3 install --force-reinstall --no-deps /tmp/huggingface_hub-0.33.0-py3-none-any.whl && \
         # Additional performance packages
-        pip3 install --force-reinstall --no-deps /tmp/numpy-*.whl && \
-        pip3 install --force-reinstall --no-deps /tmp/tiktoken-0.9.0-*.whl && \
-        pip3 install --force-reinstall --no-deps /tmp/einops-0.8.1-*.whl && \
-        pip3 install --force-reinstall --no-deps /tmp/pydantic-2.11.5-*.whl && \
+        pip3 install --force-reinstall --no-deps /tmp/numpy-2.2.6-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl && \
+        pip3 install --force-reinstall --no-deps /tmp/scipy-1.15.3-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl && \
+        pip3 install --force-reinstall --no-deps /tmp/tiktoken-0.9.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl && \
+        pip3 install --force-reinstall --no-deps /tmp/einops-0.8.1-py3-none-any.whl && \
+        pip3 install --force-reinstall --no-deps /tmp/pydantic-2.11.5-py3-none-any.whl && \
+        pip3 install --force-reinstall --no-deps /tmp/pillow-11.2.1-cp310-cp310-manylinux_2_28_aarch64.whl && \
+        pip3 install --force-reinstall --no-deps /tmp/opencv_python-4.11.0.86-cp37-abi3-manylinux_2_17_aarch64.manylinux2014_aarch64.whl && \
+        pip3 install --force-reinstall --no-deps /tmp/aiohttp-3.12.12-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl && \
+        pip3 install --force-reinstall --no-deps /tmp/httpx-0.28.1-py3-none-any.whl && \
+        pip3 install --force-reinstall --no-deps /tmp/requests-2.32.4-py3-none-any.whl && \
         rm -f /tmp/*.whl; \
     else \
         pip3 install --retries 5 --timeout 300 \
